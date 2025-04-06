@@ -3,10 +3,19 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class RentalSystem {
+	private static RentalSystem theOne; 
+	
     private List<Vehicle> vehicles = new ArrayList<>();
     private List<Customer> customers = new ArrayList<>();
     private RentalHistory rentalHistory = new RentalHistory();
 
+    private RentalSystem() {}
+    public static RentalSystem getRent() {
+        if (theOne == null) {
+        	theOne = new RentalSystem();
+        }
+        return theOne;
+    }
     public void addVehicle(Vehicle vehicle) {
         vehicles.add(vehicle);
     }
