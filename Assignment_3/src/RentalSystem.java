@@ -1,4 +1,10 @@
 import java.util.List;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -19,10 +25,13 @@ public class RentalSystem {
 
     public void addVehicle(Vehicle vehicle) {
         vehicles.add(vehicle);
+        saveVehicle(vehicle);
+        
     }
 
     public void addCustomer(Customer customer) {
         customers.add(customer);
+        saveCustomer(customer);
     }
 
     public void rentVehicle(Vehicle vehicle, Customer customer, LocalDate date, double amount) {
@@ -34,6 +43,7 @@ public class RentalSystem {
         else {
             System.out.println("Vehicle is not available for renting.");
         }
+        saveRecord(rentalHistory);
     }
 
     public void returnVehicle(Vehicle vehicle, Customer customer, LocalDate date, double extraFees) {
@@ -41,6 +51,7 @@ public class RentalSystem {
             vehicle.setStatus(Vehicle.VehicleStatus.AVAILABLE);
             rentalHistory.addRecord(new RentalRecord(vehicle, customer, date, extraFees, "RETURN"));
             System.out.println("Vehicle returned by " + customer.getCustomerName());
+            saveRecord(rentalHistory);
         }
         else {
             System.out.println("Vehicle is not rented.");
@@ -85,5 +96,52 @@ public class RentalSystem {
             if (c.getCustomerId() == Integer.parseInt(id))
                 return c;
         return null;
+    }
+    
+    public void saveVehicle(Vehicle vehicle){
+    	try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter("vehicles.txt"));
+			writer.write("\n"+vehicle.getInfo());
+			writer.close();
+		} catch (IOException e) {
+		
+			e.printStackTrace();
+		}
+    	
+    }
+    
+    public void saveCustomer(Customer customer){
+    	try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter("customers.txt",true));
+			writer.write("\n"+customer.toString());
+			writer.close();
+		} catch (IOException e) {
+		
+			e.printStackTrace();
+		}
+    	
+    }
+    
+    public void saveRecord(RentalHistory record){
+    	try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter("rental_records.txt",true));
+			writer.write("\n"+rentalHistory.getRentalHistory());
+			writer.close();
+		} catch (IOException e) {
+		
+			e.printStackTrace();
+		}
+    	
+    }
+    
+    private void loadData() {
+    	try {
+			BufferedReader reader = new BufferedReader(new FileReader("vehicles.txt"));
+			System.out.println(reader.readLine());
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 }

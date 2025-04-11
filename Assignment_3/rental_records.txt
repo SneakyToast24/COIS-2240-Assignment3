@@ -1,0 +1,2 @@
+[RENT | Plate: 1 | Customer: bob | Date: 2025-04-11 | Amount: $11.0]
+[RENT | Plate: 1 | Customer: bob | Date: 2025-04-11 | Amount: $11.0, RETURN | Plate: 1 | Customer: bob | Date: 2025-04-11 | Amount: $11.0]
