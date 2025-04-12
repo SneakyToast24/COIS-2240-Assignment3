@@ -12,7 +12,7 @@ public class Car extends Vehicle implements Rentable {
 
     @Override
     public String getInfo() {
-        return super.getInfo() + " | Seats: " + numSeats;
+        return super.getInfo() + " Seats: " + numSeats;
     }
 
     @Override

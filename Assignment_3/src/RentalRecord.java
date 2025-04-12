@@ -23,6 +23,7 @@ public class RentalRecord {
     	return vehicle;
     }
     
+    
     @Override
     public String toString() {
         return recordType + " | Plate: " + vehicle.getLicensePlate() + 

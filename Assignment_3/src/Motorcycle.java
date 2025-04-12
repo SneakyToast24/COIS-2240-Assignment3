@@ -12,7 +12,7 @@ public class Motorcycle extends Vehicle implements Rentable {
 
     @Override
     public String getInfo() {
-        return super.getInfo() + " | Sidecar: " + (hasSidecar ? "Yes" : "No");
+        return super.getInfo() + " Sidecar: " + (hasSidecar ? "Yes" : "No");
     }
 
     @Override

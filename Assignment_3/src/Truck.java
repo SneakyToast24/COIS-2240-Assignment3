@@ -13,7 +13,7 @@ public class Truck extends Vehicle implements Rentable {
 
     @Override
     public String getInfo() {
-        return super.getInfo() + " | Cargo Capacity: " + cargoCapacity;
+        return super.getInfo() + " Cargo Capacity: " + cargoCapacity;
     }
 
     @Override

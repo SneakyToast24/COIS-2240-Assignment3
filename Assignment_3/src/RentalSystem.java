@@ -14,8 +14,11 @@ public class RentalSystem {
     private List<Vehicle> vehicles = new ArrayList<>();
     private List<Customer> customers = new ArrayList<>();
     private RentalHistory rentalHistory = new RentalHistory();
+
+
+
     
-    private RentalSystem() {}
+    private RentalSystem() {loadData();}
     public static RentalSystem getInstance() {
         if (theOne == null) {
         	theOne = new RentalSystem();
@@ -100,7 +103,7 @@ public class RentalSystem {
     
     public void saveVehicle(Vehicle vehicle){
     	try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter("vehicles.txt"));
+			BufferedWriter writer = new BufferedWriter(new FileWriter("vehicles.txt",true));
 			writer.write("\n"+vehicle.getInfo());
 			writer.close();
 		} catch (IOException e) {
@@ -133,15 +136,54 @@ public class RentalSystem {
 		}
     	
     }
+
     
-    private void loadData() {
-    	try {
-			BufferedReader reader = new BufferedReader(new FileReader("vehicles.txt"));
-			System.out.println(reader.readLine());
+   
+
+	public void loadData() {
+    	try (BufferedReader reader = new BufferedReader(new FileReader("vehicles.txt"))) {
+            String line;
+			try {
+				line = reader.readLine();
 			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+            String[] parts = line.split("\\|");                
+                    String plate = parts[1];
+                    String make = parts[2];
+                    String model = parts[3];
+                    int year = Integer.parseInt(parts[4].trim());
+					Vehicle.VehicleStatus status = parts[5].equalsIgnoreCase("RENTED") ? Vehicle.VehicleStatus.RENTED : Vehicle.VehicleStatus.AVAILABLE;
+                    
+                    String extraInfo = parts[6];
+                    Vehicle vehicle=null;                   
+                    if (extraInfo.startsWith("Seats:")) {
+                        int seats = Integer.parseInt(extraInfo.split(":")[1]);
+                        vehicle = new Car(make, model, year, seats);
+                    } else if (extraInfo.startsWith("Sidecar:")) {
+                        boolean sidecar = Boolean.parseBoolean(extraInfo.split(":")[1]);
+                        vehicle = new Motorcycle(make, model, year, sidecar);
+                    } else if (extraInfo.startsWith("Cargo:")) {
+                        double cargo = Double.parseDouble(extraInfo.split(":")[1]);
+                        vehicle = new Truck(make, model, year, cargo);
+                    }
+
+                    if (vehicle != null) {
+                    	vehicle.setLicensePlate(plate);
+	                    addVehicle(vehicle);
+	                    
+                    }
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			};
+            } catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+        
+    	
+    	
     }
 }
